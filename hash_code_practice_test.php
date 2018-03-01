@@ -5,11 +5,11 @@ Page::TopHead("Self-driving rides");
 class analyzed_data {
 
   public $data;
-  public $rang;
   public $init_set;
   public $map;
   public $vehicles;
   public $rides;
+  public $rides_num;
   public $bonus;
   public $steps;
   public $rf1;
@@ -18,6 +18,8 @@ class analyzed_data {
   public $rt2;
   public $es;
   public $lf;
+
+  public $FullRides;
 
   function __construct($filePath) {
     $this->data = file_get_contents($filePath);
@@ -40,6 +42,7 @@ class analyzed_data {
     }
     $this->vehicles = intval($this->init_set[2]);
     $this->rides = array();
+    $this->rides_num = intval($this->init_set[3]);
     for ($v = 1; $v <= count($this->data)-2; $v++) {
       $inter_arr = explode(" ", $this->data[$v]);
       $this->rides[$v] = array(
@@ -49,18 +52,38 @@ class analyzed_data {
         'rt2' => intval($inter_arr[3]),
         'es' => intval($inter_arr[4]),
         'lf' => intval($inter_arr[5]),
+        'full_distance' =>  abs(0 - intval($inter_arr[2])) + abs(0 - intval($inter_arr[3]));
+        'distance_from_to' => abs(intval($inter_arr[0]) - intval($inter_arr[2])) + abs(intval($inter_arr[1]) - intval($inter_arr[3]));
+        'distance_from_start' => abs(0 - $inter_arr[0]) + abs(0 - intval($inter_arr[1]));
       );
     }
     $this->bonus = intval($this->init_set[4]);
     $this->steps = intval($this->init_set[5]);
     return $this->rides;
   }
+
+  function CreationRides () {
+
+      for($r_num = 1; $r_num <= $this->rides_num; $r_num++){
+
+          $this->FullRides  = array(
+            $k => array(
+              "$r_num" => $this->rides[$r_num]['distance_from_to'];
+            );
+          );
+      
+
+      }
+    }
+  } 
 }
 
 
 $test = new analyzed_data("./a_example.in");
 $test->getContents();
 var_dump($test->extractRideData());
+
+
 
 Page::Bottom();
 ?>
