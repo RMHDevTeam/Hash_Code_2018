@@ -1,5 +1,6 @@
 <?php
-echo "<html><head></head><body>";
+require "./Topics.php";
+Page::TopHead("Self-driving rides");
 
 class analyzed_data {
 
@@ -96,5 +97,5 @@ class analyzed_data {
 $test = new analyzed_data("./a_example.in");
 var_dump($test->getContents());
 
-echo "</body></html>";
+Page::Bottom();
 ?>
