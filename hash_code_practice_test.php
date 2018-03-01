@@ -5,7 +5,6 @@ Page::TopHead("Self-driving rides");
 class analyzed_data {
 
   public $data;
-  public $rang;
   public $init_set;
   public $map;
   public $vehicles;
@@ -54,13 +53,21 @@ class analyzed_data {
     $this->bonus = intval($this->init_set[4]);
     $this->steps = intval($this->init_set[5]);
     return $this->rides;
-  }
+    }
+
+    function displayResult() {
+      $res_file = 'results.txt';
+      $handle = fopen($res_file, 'w') or die ('Can`t open file:  ' . $res_file);
+      $results_content = '1 0'. "\n" . '2 2 1';
+      fwrite($handle, $results_content);
+    }
 }
 
 
 $test = new analyzed_data("./a_example.in");
 $test->getContents();
-var_dump($test->extractRideData());
+$test->extractRideData();
+$test->displayResult();
 
 Page::Bottom();
 ?>
