@@ -19,7 +19,8 @@ class ANALYZED_DATA {
   public $es;
   public $lf;
 
-  public $FullRides;
+  public $rides_list;
+  public $combinations;
 
   function __construct($filePath) {
     $this->data = file_get_contents($filePath);
@@ -59,14 +60,35 @@ class ANALYZED_DATA {
     }
     $this->bonus = intval($this->init_set[4]);
     $this->steps = intval($this->init_set[5]);
+    $this->combinations = intval(1);
+
+    $this->rides_list = array_fill(0, 2, array_fill(1, $this->rides_num - 1, array_fill(1, $this->rides_num - 1, array_fill(1, $this->vehicles, array_fill(1, $this->rides_num - 1, 0)))));
     return $this->rides;
     }
 
     function FindingTrueWays() {
 
-      for($k = 0; $k < $this->rides_num; $k++){
+      for($itt = $this->rides_num; $itt >= $this->rides_num - ($this->vehicles - 1); $itt--){
 
-        $this->FullRides = 0;
+        $this->combinations *= $itt;
+      }
+
+      for($rev = 0; $rev <= 1; $rev++){
+        for($ride = 1; $ride < $this->rides_num - 1; $ride++){
+          for($ride_per_way = $this->rides_num; $ride_per_way > 0; $ride_per_way--){
+            for($cur_vehicles = 1; $cur_vehicles < $this->vehicles; $cur_vehicles++){
+
+              for($rides_per_v = $this->ride_per_way - ($this->vehicles - 1); $rides_per_v > 0; $rides_per_v--){
+                for($deway = 0; $deway < $rides_per_v; $deway++){
+
+                  $this->rides_list[$rev][$ride][$ride_per_way][$cur_vehicles][0] = 0;
+
+                }
+              }
+
+            }
+          }
+        }
       }
 
     }
@@ -76,13 +98,18 @@ class ANALYZED_DATA {
       $handle = fopen($res_file, 'w') or die ('Can`t open file:  ' . $res_file);
       $results_content = '1 0'. "\n" . '2 2 1';
       fwrite($handle, $results_content);
+      var_dump($this->rides_list);
     }
+
 }
 
 
 $test = new ANALYZED_DATA("./a_example.in");
 $test->GetContents();
 $test->ExtractRideData();
+
+//$test->FindingTrueWays();
+
 $test->DisplayResult();
 
 
