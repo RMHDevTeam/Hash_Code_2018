@@ -1,5 +1,5 @@
 <?php
-class Page{
+class PAGE{
 
     function TopHead($head){
         echo "<html><head><title>" . $head . "</title></head><body>";
